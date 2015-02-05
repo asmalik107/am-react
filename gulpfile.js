@@ -13,16 +13,21 @@ var reactify = require('reactify');
 
 
 gulp.task('styles', function() {
-  return gulp.src('app/styles/main.scss')
+var lazypipe = require('lazypipe');
+  var cssChannel = lazypipe()
+    .pipe($.replace, 'font/roboto', 'fonts')
+    .pipe($.replace, 'font/material-design-icons', 'fonts');
+
+   return gulp.src('app/styles/main.scss')
     .pipe($.plumber())
     .pipe($.rubySass({
       style: 'expanded',
       precision: 10
-    }))
+    })).pipe(cssChannel())
     .pipe($.autoprefixer({
       browsers: ['last 1 version']
     }))
-    .pipe(gulp.dest('.tmp/styles'));
+    .pipe(gulp.dest('.tmp/styles'));  
 });
 
 gulp.task('jshint', function() {
@@ -37,7 +42,9 @@ gulp.task('html', ['styles'], function() {
   var lazypipe = require('lazypipe');
   var cssChannel = lazypipe()
     .pipe($.csso)
-    .pipe($.replace, 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap', 'fonts');
+   // .pipe($.replace, 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap', 'fonts')
+/*    .pipe($.replace, 'font/roboto', 'fonts')
+    .pipe($.replace, 'font/material-design-icons', 'fonts')*/;
   var assets = $.useref.assets({
     searchPath: '{.tmp,app}'
   });
@@ -144,6 +151,7 @@ gulp.task('connect', ['styles'], function() {
     }))
     .use(serveStatic('.tmp'))
     .use(serveStatic('app'))
+    .use(serveStatic('dist'))
     // paths to bower_components should be relative to the current file
     // e.g. in app/index.html you should use ../bower_components
     .use('/bower_components', serveStatic('bower_components'))

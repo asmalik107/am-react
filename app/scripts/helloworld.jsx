@@ -2,6 +2,9 @@
 var React = require('react');
 
 
-React.render(<h1>Hello, world!</h1>,
+var hello = React.render(<h1>Hello, world!</h1>,
 	document.getElementById('example') 
-);
+); 
+
+
+module.exports = hello;

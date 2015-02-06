@@ -195,6 +195,7 @@ gulp.task('watch', ['connect'], function() {
   ]).on('change', $.livereload.changed);
 
   gulp.watch('app/scripts/**/*.js', ['browserify']);
+  gulp.watch('app/scripts/**/*.jsx', ['browserify']);
   gulp.watch('app/styles/**/*.scss', ['styles']);
   gulp.watch('bower.json', ['wiredep']);
 });
